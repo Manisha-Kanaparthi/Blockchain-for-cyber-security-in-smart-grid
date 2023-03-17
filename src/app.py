@@ -25,9 +25,9 @@ def homePage():
     data=[]
     for i in range(len(v)):
         dummy=[]
-        dummy.append(v[i].decode('utf-8'))
-        dummy.append(c[i].decode('utf-8'))
-        dummy.append(p[i].decode('utf-8'))
+        dummy.append(v[i])
+        dummy.append(c[i])
+        dummy.append(p[i])
         data.append(dummy)
     return render_template('index.html',dashboard_data=data,len=len(data))
 

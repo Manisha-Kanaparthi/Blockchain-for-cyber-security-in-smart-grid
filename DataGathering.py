@@ -10,7 +10,7 @@ def connect_with_energy_meter(acc):
     if acc==0:
         acc=web3.eth.accounts[0]
     web3.eth.defaultAccount=acc
-    artifact_path='../build/contracts/energymeter.json'
+    artifact_path='build/contracts/energymeter.json'
     with open(artifact_path) as f:
         contract_json=json.load(f)
         contract_abi=contract_json['abi']
