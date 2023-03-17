@@ -31,6 +31,16 @@ def homePage():
         data.append(dummy)
     return render_template('index.html',dashboard_data=data,len=len(data))
 
+@app.route('/gridcontroller')
+def gridController():
+    cumulativePower=0
+    contract,web3=connect_with_energy_meter(0)
+    v,c,p=contract.functions.viewData().call()
+    data=[]
+    for i in range(len(v)):
+        cumulativePower+=float(p[i])
+    return render_template('gridcontroller.html',res=cumulativePower)
+
 if __name__=="__main__":
     app.run(debug=True)
 
