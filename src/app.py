@@ -1,8 +1,6 @@
-import requests
-import iotDevice
-import time
 from web3 import Web3,HTTPProvider
 import json
+from flask import Flask,render_template
 
 def connect_with_energy_meter(acc):
     blockchainServer='http://127.0.0.1:7545'
@@ -18,16 +16,21 @@ def connect_with_energy_meter(acc):
     contract=web3.eth.contract(address=contract_address,abi=contract_abi)
     return(contract,web3)
 
-apiRequest='https://api.thingspeak.com/update?api_key=SFV5HOTQWQHZWUP4&field1='
+app=Flask(__name__)
 
-while True:
-    v,c,p=iotDevice.getSensoryFeed()
-    apiRequest+=str(v)+'&field2='+str(c)+'&field3='+str(p)
-    statusCode=requests.get(apiRequest)
-    print(statusCode)
+@app.route('/')
+def homePage():
     contract,web3=connect_with_energy_meter(0)
-    tx_hash=contract.functions.insertData(str(v),str(c),str(p)).transact()
-    web3.eth.waitForTransactionReceipt(tx_hash)
-    time.sleep(10)
+    v,c,p=contract.functions.viewData().call()
+    data=[]
+    for i in range(len(v)):
+        dummy=[]
+        dummy.append(v[i].decode('utf-8'))
+        dummy.append(c[i].decode('utf-8'))
+        dummy.append(p[i].decode('utf-8'))
+        data.append(dummy)
+    return render_template('index.html',dashboard_data=data,len=len(data))
 
+if __name__=="__main__":
+    app.run(debug=True)
 
