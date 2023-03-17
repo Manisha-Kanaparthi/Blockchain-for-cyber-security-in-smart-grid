@@ -39,7 +39,17 @@ def gridController():
     data=[]
     for i in range(len(v)):
         cumulativePower+=float(p[i])
-    return render_template('gridcontroller.html',res=cumulativePower)
+    
+    if cumulativePower>15 and cumulativePower<30:
+        res1='Turn on the SubStation 1 Power Grid'
+    elif cumulativePower>30 and cumulativePower<45:
+        res1='Turn on Substation 1 Power Grid and Solar Grid'
+    elif cumulativePower>45 and cumulativePower<60:
+        res1='Turn on the Wind Grid, Substation 1 Power Grid and Solar Grid'
+    else:
+        res1='Turn on all the alternate Grids to supply power'
+
+    return render_template('gridcontroller.html',res=cumulativePower,res1=res1)
 
 if __name__=="__main__":
     app.run(debug=True)
